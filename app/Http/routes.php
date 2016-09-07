@@ -26,6 +26,13 @@ Route::get('/', function () {
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
+/*Route::group(['middleware' => ['web']], function () {
     //
-});
+});*/
+
+//Route::resource('articles', 'ArticlesController');
+
+Route::get('/articles/create','ArticlesController@create');
+Route::get('/articles','ArticlesController@index');
+Route::post('/articles','ArticlesController@store');
+Route::get('/articles/show/{id}','ArticlesController@show');
