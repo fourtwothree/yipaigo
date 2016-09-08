@@ -9,8 +9,9 @@
                 </a>
             </div>
             <div class="media-body">
-                <h4 class="media-heading">
-                        <a class="btn btn-lg btn-success pull-right" href="/articles/{{$article->id}}/edit" role="button">修改贴子</a>
+                <h4 class="media-heading">{{$article->title}}
+                    <a class="btn btn-lg btn-danger pull-right" href="/articles/delete/{{$article->id}}" role="button">删除贴子</a>
+                    <a class="btn btn-lg btn-success pull-right" href="/articles/edit/{{$article->id}}" role="button">修改贴子</a>
                 </h4>
             </div>
         </div>
@@ -22,36 +23,37 @@
     <div class="row">
         <div class="col-md-9" role="main" id="post">
             <div class="blog-post">
-                {{--占位符--}}
+                {{$article->body}}
             </div>
             <hr>
             @foreach($article->comments as $comment)
                 <div class="media">
                     <div class="media-left">
                         <a href="">
-                            <img class="media-object img-circle" alt="64x64" src="{{$comment->user->avatar}}" style="width:64px; height:64px;" >
+                            {{--占位符--}}
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">{{$comment->user->name}}</h4>
+                        <h4 class="media-heading"></h4>
                         {{$comment->body}}
+                        <a class="btn btn-sm btn-danger pull-right" href="/comments/delete/{{$comment->id}}" role="button">删除评论</a>
                     </div>
                 </div>
+
+                <hr>
             @endforeach
 
-            <div class="media" v-for="comment in comments">
-                <div class="media-left">
-                    <a href="">
-                        <img class="media-object img-circle" alt="64x64" src="@{{comment.avatar}}" style="width:64px; height:64px;" >
-                    </a>
+            <form method="POST" action="/comments" accept-charset="UTF-8">
+                <input name="article_id" type="hidden" value="{{$article->id}}">
+                <div class="form-group">
+                    <textarea class="form-control" name="body" cols="50" rows="10"></textarea>
                 </div>
-                <div class="media-body">
-                    <h4 class="media-heading">@{{comment.name}}</h4>
-                    @{{comment.body}}
+                <div>
+                    <input class="btn btn-success pull-right" type="submit" value="发表评论">
                 </div>
-            </div>
+            </form>
 
-            <hr>
+
         </div>
     </div>
 </div>

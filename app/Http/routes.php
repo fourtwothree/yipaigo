@@ -1,38 +1,23 @@
 <?php
-
-/*
-|--------------------------------------------------------------------------
-| Routes File
-|--------------------------------------------------------------------------
-|
-| Here is where you will register all of the routes in an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-
 Route::get('/', function () {
     return view('welcome');
 });
-
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| This route group applies the "web" middleware group to every route
-| it contains. The "web" middleware group is defined in your HTTP
-| kernel and includes session state, CSRF protection, and more.
-|
-*/
-
 /*Route::group(['middleware' => ['web']], function () {
     //
 });*/
 
 //Route::resource('articles', 'ArticlesController');
 
-Route::get('/articles/create','ArticlesController@create');
+
 Route::get('/articles','ArticlesController@index');
 Route::post('/articles','ArticlesController@store');
+Route::get('/articles/create','ArticlesController@create');
 Route::get('/articles/show/{id}','ArticlesController@show');
+Route::get('/articles/edit/{id}','ArticlesController@edit');
+Route::post('/articles/update/{id}','ArticlesController@update');
+Route::get('/articles/delete/{id}','ArticlesController@delete');
+
+
+Route::get('/comments','CommentsController@index');
+Route::post('/comments','CommentsController@store');
+Route::get('/comments/delete/{id}','CommentsController@delete');
