@@ -68,18 +68,6 @@ class ExampleTest extends TestCase
 
     }
 
-    public function testApplication()
-    {
-        /*$this->withSession(['foo' => 'bar'])
-             ->visit('/');*/
-
-        $user = factory('App\User')->create();
-
-        $this->actingAs($user)
-             ->withSession(['foo' => 'bar'])
-             ->visit('/')
-             ->see('Hello, '.$user->name);
-    }
 }
 
 

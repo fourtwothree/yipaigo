@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ArticlesController extends Controller
 {
+    /**
+     * 文章列表页
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
     public function index()
     {
         $articles = Article::latest()->get();
@@ -18,7 +22,7 @@ class ArticlesController extends Controller
     }
 
     /**
-     * 发表文章
+     * 文章创建
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function create()
@@ -27,7 +31,9 @@ class ArticlesController extends Controller
     }
 
     /**
-     *
+     * 文章提交
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function store(Request $request)
     {
@@ -46,6 +52,11 @@ class ArticlesController extends Controller
         return redirect('/articles');
     }
 
+    /**
+     * 指定文章展示页
+     * @param $id
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
     public function show($id)
     {
         $article = Article::where('id', $id)->first();
@@ -53,6 +64,11 @@ class ArticlesController extends Controller
         return view('articles.show', compact('article'));
     }
 
+    /**
+     * 指定文章编辑页
+     * @param $id
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
     public function edit($id)
     {
         $article = Article::where('id', $id)->first();
@@ -60,6 +76,12 @@ class ArticlesController extends Controller
         return view('articles.edit', compact('article'));
     }
 
+    /**
+     * 更新指定文章
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+     */
     public function update(Request $request, $id)
     {
         $input = $request->all();
@@ -68,17 +90,30 @@ class ArticlesController extends Controller
 //        dd($article);
 
         if($article->update($input)){
-            return redirect('/articles');
+            return redirect('/articles/show/'.$id);
         }else{
             echo '更新文章失败！';
         }
 
     }
 
+    /**
+     * 删除指定文章
+     * @param $id
+     */
     public function delete($id)
     {
         $article = Article::find($id);
 
+//        dd(count($article->comments));
+
+        //1.文章下有评论不能删除
+        /*if(count($article->comments)){
+            exit('请先删除该文章下的所有评论！');
+        }*/
+
+        //2.未定义外键onDelete('cascade')，文章删除，文章下所有评论不会一并删除
+        //3.已定义外键onDelete('cascade')，文章删除，文章下所有评论一并删除
         if($article->delete()){
             echo '删除文章成功！';
         }else{
