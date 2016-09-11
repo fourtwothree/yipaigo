@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Comment;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Comment;
+use App\Http\Requests\StoreCommentsRequest;
 
 class CommentsController extends Controller
 {
@@ -17,21 +17,8 @@ class CommentsController extends Controller
      */
     public function index()
     {
-        $comments = Comment::latest()->get();
-//        dd($comments);
-        /*$comment = Comment::find(2);
-        dd($comment);
-        $article = $comment->article;
-        dd($article);*/
-
-        /*foreach($comments as $k=>$comment)
-        {
-            $data[$k]['article'] = $comment->article;
-            $data[$k]['comment'] = $comment;
-        }
-
-        dd($data);*/
-
+        $comment = new Comment();
+        $comments = $comment->getLatestComments();
         return view('comments.index', compact('comments'));
     }
 
@@ -40,21 +27,11 @@ class CommentsController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
-    public function store(Request $request)
+    public function store(StoreCommentsRequest $request)
     {
         $input = $request->all();
-//        dd($input);
-        $validator = Validator::make($input, [
-            'body' => 'required',
-        ]);
-
-        if($validator->fails())
-        {
-            return $validator->errors()->all();
-        }
-
-        Comment::create($input);
-//        return redirect('/articles');
+        $comment = new Comment();
+        $comment->createComment($input);
         return redirect()->back();
     }
 
@@ -65,10 +42,10 @@ class CommentsController extends Controller
      */
     public function delete($id)
     {
-        $comment = Comment::find($id);
+        $comment = new Comment();
 
-        if($comment->delete()){
-           return redirect('/articles');
+        if($comment->deleteComment($id)){
+           return redirect()->back();
         }else{
             echo '删除评论失败！';
         }

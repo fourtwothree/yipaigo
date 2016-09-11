@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Article;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Article;
+use App\Http\Requests\StoreArticlesRequest;
 
 class ArticlesController extends Controller
 {
@@ -17,7 +17,8 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = Article::latest()->get();
+        $article = new Article(); //没有用laravel的Facade(门面)，放弃了本身laravel的特点
+        $articles = $article->getLatestArticles();
         return view('articles.index', compact('articles'));
     }
 
@@ -35,20 +36,11 @@ class ArticlesController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
-    public function store(Request $request)
+    public function store(StoreArticlesRequest $request)
     {
         $input = $request->all();
-        $validator = Validator::make($input, [
-            'title' => 'required|min:3',
-            'body' =>'required',
-        ]);
-
-        if($validator->fails())
-        {
-            return $validator->errors()->all();
-        }
-
-        Article::create($input);
+        $article = new Article();
+        $article->createArticle($input);
         return redirect('/articles');
     }
 
@@ -59,8 +51,8 @@ class ArticlesController extends Controller
      */
     public function show($id)
     {
-        $article = Article::where('id', $id)->first();
-//        dd($article);
+        $article = new Article();
+        $article = $article->getArticleById($id);
         return view('articles.show', compact('article'));
     }
 
@@ -71,8 +63,8 @@ class ArticlesController extends Controller
      */
     public function edit($id)
     {
-        $article = Article::where('id', $id)->first();
-//        dd($article);
+        $article = new Article();
+        $article = $article->getArticleById($id);
         return view('articles.edit', compact('article'));
     }
 
@@ -85,16 +77,13 @@ class ArticlesController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
-//        dd($input);
-        $article = Article::where('id', '=', $id)->first();
-//        dd($article);
+        $article = new Article();
 
-        if($article->update($input)){
+        if($article->updateArticle($id, $input)){
             return redirect('/articles/show/'.$id);
         }else{
             echo '更新文章失败！';
         }
-
     }
 
     /**
@@ -103,18 +92,9 @@ class ArticlesController extends Controller
      */
     public function delete($id)
     {
-        $article = Article::find($id);
+        $article = new Article();
 
-//        dd(count($article->comments));
-
-        //1.文章下有评论不能删除
-        /*if(count($article->comments)){
-            exit('请先删除该文章下的所有评论！');
-        }*/
-
-        //2.未定义外键onDelete('cascade')，文章删除，文章下所有评论不会一并删除
-        //3.已定义外键onDelete('cascade')，文章删除，文章下所有评论一并删除
-        if($article->delete()){
+        if($article->deleteArticle($id)){
             echo '删除文章成功！';
         }else{
             echo '删除文章失败！';
