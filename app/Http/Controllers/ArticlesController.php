@@ -5,21 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-
-use App\Models\Article;
 use App\Http\Requests\StoreArticlesRequest;
+
+use App\Contracts\ArticleContract;
 
 class ArticlesController extends Controller
 {
+    protected $article;
+
+    /**
+     * 依赖注入接口
+     * ArticlesController constructor.
+     * @param ArticleContract $article
+     */
+    public function __construct(ArticleContract $article){
+        $this->article = $article;
+    }
+
     /**
      * 文章列表页
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
     public function index()
     {
-        $article = new Article(); //没有用laravel的Facade(门面)，放弃了本身laravel的特点
-        $articles = $article->getLatestArticles();
+        $articles = $this->article->getLatestArticles();
         return view('articles.index', compact('articles'));
+//        $articles = $this->article->test();
     }
 
     /**
@@ -39,8 +50,7 @@ class ArticlesController extends Controller
     public function store(StoreArticlesRequest $request)
     {
         $input = $request->all();
-        $article = new Article();
-        $article->createArticle($input);
+        $this->article->createArticle($input);
         return redirect('/articles');
     }
 
@@ -51,8 +61,7 @@ class ArticlesController extends Controller
      */
     public function show($id)
     {
-        $article = new Article();
-        $article = $article->getArticleById($id);
+        $article = $this->article->getArticleById($id);
         return view('articles.show', compact('article'));
     }
 
@@ -63,8 +72,7 @@ class ArticlesController extends Controller
      */
     public function edit($id)
     {
-        $article = new Article();
-        $article = $article->getArticleById($id);
+        $article = $this->article->getArticleById($id);
         return view('articles.edit', compact('article'));
     }
 
@@ -77,9 +85,7 @@ class ArticlesController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
-        $article = new Article();
-
-        if($article->updateArticle($id, $input)){
+        if($this->article->updateArticle($id, $input)){
             return redirect('/articles/show/'.$id);
         }else{
             echo '更新文章失败！';
@@ -92,10 +98,8 @@ class ArticlesController extends Controller
      */
     public function delete($id)
     {
-        $article = new Article();
-
-        if($article->deleteArticle($id)){
-            echo '删除文章成功！';
+        if($this->article->deleteArticle($id)){
+            return redirect('/articles');
         }else{
             echo '删除文章失败！';
         }

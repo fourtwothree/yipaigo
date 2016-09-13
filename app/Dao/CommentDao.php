@@ -2,9 +2,9 @@
 
 namespace App\Dao;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Comment;
 
-class Dao extends Model
+class CommentDao
 {
     /**
      * 按时间降序得到所有记录
@@ -12,7 +12,7 @@ class Dao extends Model
      */
     public function getLatestList()
     {
-        $dao = Self::latest()->get();
+        $dao = Comment::latest()->get();
         return $dao;
     }
 
@@ -23,18 +23,24 @@ class Dao extends Model
      */
     public function insert($input)
     {
-        $dao = Self::create($input);
+        $dao = Comment::create($input);
         return $dao;
     }
 
     /**
-     * 根据id得到指定记录
+     * 删除记录
      * @param $id
-     * @return mixed
+     * @return bool
      */
-    public function getOneById($id)
+    public function delete($id)
     {
-        $dao = Self::where('id', $id)->first();
-        return $dao;
+        $dao = Comment::where('id', $id)->first();
+
+        if($dao->delete()){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
+
