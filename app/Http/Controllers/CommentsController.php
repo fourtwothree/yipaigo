@@ -47,7 +47,7 @@ class CommentsController extends Controller
 
     /**
      * 删除指定评论
-     * @param $id
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function delete($id)

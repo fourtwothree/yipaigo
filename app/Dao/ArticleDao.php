@@ -47,12 +47,7 @@ class ArticleDao
     public function update($id, $input)
     {
         $dao = $this->getOneById($id);
-
-        if($dao->update($input)){
-            return true;
-        }else{
-            return false;
-        }
+        return $dao->update($input);
     }
 
     /**
@@ -63,11 +58,6 @@ class ArticleDao
     public function delete($id)
     {
         $dao = $this->getOneById($id);
-
-        if($dao->delete()){
-            return true;
-        }else{
-            return false;
-        }
+        return $dao->delete();
     }
 }

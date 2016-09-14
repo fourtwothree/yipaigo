@@ -30,7 +30,6 @@ class ArticlesController extends Controller
     {
         $articles = $this->article->getLatestArticles();
         return view('articles.index', compact('articles'));
-//        $articles = $this->article->test();
     }
 
     /**

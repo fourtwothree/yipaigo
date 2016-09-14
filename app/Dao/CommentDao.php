@@ -8,7 +8,8 @@ class CommentDao
 {
     /**
      * 按时间降序得到所有记录
-     * @return mixed
+     * @param null
+     * @return object
      */
     public function getLatestList()
     {
@@ -18,8 +19,8 @@ class CommentDao
 
     /**
      * 插入记录
-     * @param $input
-     * @return static
+     * @param  array $input
+     * @return object
      */
     public function insert($input)
     {
@@ -29,18 +30,13 @@ class CommentDao
 
     /**
      * 删除记录
-     * @param $id
+     * @param int $id
      * @return bool
      */
     public function delete($id)
     {
         $dao = Comment::where('id', $id)->first();
-
-        if($dao->delete()){
-            return true;
-        }else{
-            return false;
-        }
+        return $dao->delete();
     }
 }
 

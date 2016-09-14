@@ -9,7 +9,8 @@ class CommentService implements CommentContract
 {
     /**
      * 按时间降序获取评论列表
-     * @return mixed
+     * @param null
+     * @return object
      */
     public function getLatestComments()
     {
@@ -18,9 +19,9 @@ class CommentService implements CommentContract
     }
 
     /**
-     * 发表评论
-     * @param $input
-     * @return mixed
+     * 发表评论并插入数据库
+     * @param array $input
+     * @return object
      */
     public function createComment($input)
     {
@@ -29,8 +30,8 @@ class CommentService implements CommentContract
     }
 
     /**
-     * 删除评论
-     * @param $id
+     * 根据id删除指定评论
+     * @param int $id
      * @return bool
      */
     public function deleteComment($id)

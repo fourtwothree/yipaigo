@@ -33,6 +33,7 @@ class ArticleService implements ArticleContract
     /**
      * 根据id获取指定文章
      * @param $id
+     * @return mixed
      */
     public function getArticleById($id)
     {
@@ -63,9 +64,4 @@ class ArticleService implements ArticleContract
         $dao = new ArticleDao();
         return $dao->delete($id);
     }
-
-    /*public function test()
-    {
-        dd('test');
-    }*/
 }
