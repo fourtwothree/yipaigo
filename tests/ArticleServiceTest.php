@@ -72,6 +72,6 @@ class ArticleServiceTest extends TestCase
 
         $articleService->deleteArticle(1);
 
-        $this->notSeeInDatabase('article', ['id'=>1, 'title'=>'phpunit title', 'body'=>'phpunit body']);
+        $this->notSeeInDatabase('articles', ['id'=>1, 'title'=>'phpunit title', 'body'=>'phpunit body']);
     }
 }
