@@ -8,40 +8,37 @@ class ArticleDao
 {
     /**
      * 按时间降序得到所有记录
-     * @return mixed
+     * @return object
      */
     public function getLatestList()
     {
-        $dao = Article::latest()->get();
-        return $dao;
+        return Article::latest()->get();
     }
 
     /**
      * 插入记录
      * @param $input
-     * @return static
+     * @return object
      */
     public function insert($input)
     {
-        $dao = Article::create($input);
-        return $dao;
+        return Article::create($input);
     }
 
     /**
      * 根据id得到指定记录
      * @param $id
-     * @return mixed
+     * @return object
      */
     public function getOneById($id)
     {
-        $dao = Article::where('id', $id)->first();
-        return $dao;
+        return Article::where('id', $id)->first();
     }
 
     /**
-     * 更新记录
-     * @param $id
-     * @param $input
+     * 根据id更新指定记录
+     * @param int $id
+     * @param array $input
      * @return bool
      */
     public function update($id, $input)
@@ -51,8 +48,8 @@ class ArticleDao
     }
 
     /**
-     * 删除记录
-     * @param $id
+     * 根据id删除指定记录
+     * @param int $id
      * @return bool
      */
     public function delete($id)
